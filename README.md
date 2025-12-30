@@ -1,0 +1,1 @@
+**Acknowledgement / Credits** This project includes code adapted from [Google DeepMind's Torax](!https://github.com/google-deepmind/torax), licensed under Apache 2.0. The pellet injection module is a modification developed by .

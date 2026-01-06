@@ -44,8 +44,8 @@ CONFIG = {
     },
     'numerics': {
         # simulation control
-        't_final': 1,  # length of simulation time in seconds
-        'fixed_dt': 0.01,
+        't_final': 1000,  # length of simulation time in seconds
+        'fixed_dt': 0.001,
         # 1/multiplication factor for sigma (conductivity) to reduce current
         # diffusion timescale to be closer to heat diffusion timescale.
         'resistivity_multiplier': 1,
@@ -106,13 +106,13 @@ CONFIG = {
         'ohmic': {},
         'pellet': {
             # total pellet particles/s (continuous pellet model)
-            'S_total': 0.0e22,
+            'S_total': 1.23456e22,
             # Gaussian width of pellet deposition (normalized radial coordinate)
             # in continuous pellet model
-            'pellet_width': 0.1,
+            'pellet_width': 0.134567,
             # Pellet source Gaussian central location (normalized radial
             # coordinate) in continuous pellet model.
-            'pellet_deposition_location': 0.85,
+            'pellet_deposition_location': 0.6789,
         },
         # Ion and electron heat sources (for the temp-ion and temp-el eqs).
         'generic_heat': {

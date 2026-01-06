@@ -119,9 +119,9 @@ def run_simulation(
       state_history.simulation_output_to_xr(),
       state_history,
   )
-config = config_loader.build_torax_config_from_file('//iterhybrid_rampup.py')
-print(config)
-
-run_simulation(
-    torax_config=config
-)
+# config = config_loader.build_torax_config_from_file('//iterhybrid_rampup.py')
+# print(config)
+#
+# run_simulation(
+#     torax_config=config
+# )

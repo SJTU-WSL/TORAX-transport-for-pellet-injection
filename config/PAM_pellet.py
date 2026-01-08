@@ -106,13 +106,13 @@ CONFIG = {
         'ohmic': {},
         'pellet': {
             # total pellet particles/s (continuous pellet model)
-            'S_total': 1.23456e22,
+            'S_total': 2.2e22,
             # Gaussian width of pellet deposition (normalized radial coordinate)
             # in continuous pellet model
-            'pellet_width': 0.134567,
+            'pellet_width': 0.05903,
             # Pellet source Gaussian central location (normalized radial
             # coordinate) in continuous pellet model.
-            'pellet_deposition_location': 0.6789,
+            'pellet_deposition_location': 0.79582,
         },
         # Ion and electron heat sources (for the temp-ion and temp-el eqs).
         'generic_heat': {

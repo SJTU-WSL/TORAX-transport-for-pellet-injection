@@ -1,4 +1,3 @@
-from matplotlib import pyplot as plt
 import numpy as np
 from torax._src.config import config_loader
 from run_loop_sim import prepare_simulation
@@ -26,6 +25,8 @@ runtime_data = pd.DataFrame(
         'q_face', 's_face', 'T_e', 'n_e'
     ]
 )
+
+'''
 print(post_processed_outputs.Q_fusion)
 print(post_processed_outputs.H98)
 print(post_processed_outputs.W_thermal_total)
@@ -38,8 +39,7 @@ print(current_state.core_profiles.s_face)
 print(current_state.core_profiles.T_e)
 print(current_state.core_profiles.n_e)
 # exit(0)
-# for cs in current_state.core_transport:
-#     print(dir(cs))
+'''
 
 cur_override = None
 def get_vector(val):
@@ -54,12 +54,11 @@ def get_scalar(val):
     if val is None: return 0.0
     # 如果是 JAX 数组，转为 float；如果是 python float，保持不变
     return val.item() if hasattr(val, 'item') else val
-x = []
-y = []
+
 simulation_history = []
-for t in range(1000):
+for t in range(10000):
     print('step', t)
-    if 300 < t < 400 or 700 < t < 800:
+    if 3000 < t < 4000 or 7000 < t < 8000:
         print('Inject')
         cur_override = override
     else:
@@ -70,38 +69,32 @@ for t in range(1000):
         runtime_params_overrides=cur_override
     )
     row_data = {
-        't': t,  # 当前时间
+        't': t,
 
-        # --- 标量 ---
+        'pellet': 1 if not cur_override else 0,
         'Q_fusion': get_scalar(post_processed_outputs.Q_fusion),
         'H98': get_scalar(post_processed_outputs.H98),
         'W_thermal_total': get_scalar(post_processed_outputs.W_thermal_total),
         'q95': get_scalar(post_processed_outputs.q95),
         'q_min': get_scalar(post_processed_outputs.q_min),
 
-        # --- 向量 (存为 Numpy Array) ---
-        # 这里的长度可能是 26 (face) 或 25 (center)，pandas 能混存，没问题
+
         'q_face': get_vector(current_state.core_profiles.q_face),
         's_face': get_vector(current_state.core_profiles.s_face),
         'T_e': get_vector(current_state.core_profiles.T_e),
         'n_e': get_vector(current_state.core_profiles.n_e)
     }
-    print(row_data)
     simulation_history.append(row_data)
     post_processing_history.append(post_processed_outputs)
-    x.append(t)
-    y.append(current_state.core_profiles.T_e.value[0])
 
-x = np.array(x)
-y = np.array(y)
-mask1 = (x > 300) & (x < 400)
-mask2 = (x > 700) & (x < 800)
-mask = mask1 | mask2
+runtime_data = pd.DataFrame(simulation_history)
+runtime_data.to_pickle("simulation_results.pkl")
+print("Data saved to simulation_results.pkl (Recommended)")
 
-plt.xlabel('t')
-plt.ylabel('T_e')
-plt.scatter(x[~mask], y[~mask], s=1, c='b', label='Inject speed 1e22')
-plt.scatter(x[mask], y[mask], s=1, c='r', label='No injection')
-plt.grid(True)
-plt.legend()
-plt.show()
+csv_df = runtime_data.copy()
+vector_cols = ['q_face', 's_face', 'T_e', 'n_e']
+for col in vector_cols:
+    csv_df[col] = csv_df[col].apply(lambda x: x.tolist())
+
+csv_df.to_csv("simulation_results.csv", index=False)
+print("Data saved to simulation_results.csv")
